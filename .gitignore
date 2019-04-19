@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/TailWaters/.vs/TailWaters
+/TailWaters/TailWaters.Data/bin
+/TailWaters/TailWaters.Data/obj
+/TailWaters/TailWaters.Data/TailWaters.Data.csproj.user
+/TailWaters/TailWaters.MicroServices/Properties/PublishProfiles/TailWaters - Web Deploy.pubxml

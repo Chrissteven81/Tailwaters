@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28809.33
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TailWaters.MicroServices", "TailWaters.MicroServices\TailWaters.MicroServices.csproj", "{9F033501-A633-4BDC-B7A0-E821A22AA048}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TailWaters.Data", "TailWaters.Data\TailWaters.Data.csproj", "{6947CB3B-DAEB-48CD-A63C-7F1967FE1F30}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F033501-A633-4BDC-B7A0-E821A22AA048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F033501-A633-4BDC-B7A0-E821A22AA048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F033501-A633-4BDC-B7A0-E821A22AA048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F033501-A633-4BDC-B7A0-E821A22AA048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6947CB3B-DAEB-48CD-A63C-7F1967FE1F30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6947CB3B-DAEB-48CD-A63C-7F1967FE1F30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6947CB3B-DAEB-48CD-A63C-7F1967FE1F30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6947CB3B-DAEB-48CD-A63C-7F1967FE1F30}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0F54212D-1279-403A-B144-AC2FBAB5EE25}
+	EndGlobalSection
+EndGlobal
