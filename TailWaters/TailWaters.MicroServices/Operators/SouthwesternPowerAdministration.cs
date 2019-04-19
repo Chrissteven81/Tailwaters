@@ -25,35 +25,43 @@ namespace TailWaters.MicroServices.Operators
         [FunctionName("SouthwesternPowerAdministration")]
         public static async Task Run([TimerTrigger("0 0 0 * * *", RunOnStartup = true)]TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
+            //Initialize Configuration for ASP.net Core v2
             var config = new ConfigurationBuilder()
                         .SetBasePath(context.FunctionAppDirectory)
                         .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                         .AddEnvironmentVariables()
                         .Build();
 
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
+            //Get Day of the Week
             var day = DateTime.Today.DayOfWeek.ToString();
+
+            //Retrieve HTM Doc
             var html = new HtmlDocument();
             html.LoadHtml(new WebClient().DownloadString($"{_url}/{day.Substring(0, 3)}.htm"));
 
+            //Find Pertenant Node
             var grid =  html.DocumentNode.Descendants("Pre").Single();
             var lines = grid.InnerHtml.Split("\n").Where(t=> t.Trim() != string.Empty).Skip(3).Take(25).ToArray();
 
+            //Build Context Options
             var optionBuilder = new DbContextOptionsBuilder<Data.Models.TailWatersContext>();
             optionBuilder.UseSqlServer(config.GetConnectionString("TailWaters"));
+
             using (var dbContext = new TailWaters.Data.Models.TailWatersContext(optionBuilder.Options))
             {
                 //Build Cache so we only have to make 2 queries
                 var tailWatersCache = await dbContext.TailWaters.ToListAsync();
                 var scheduleCache = await dbContext.Schedules.Where(t=> t.DateCreated.Date == DateTime.UtcNow.Date).ToListAsync();
 
+                //Parse Header Data
                 var headers = lines.Take(1).Single().Split(" ").Where(t=> t.Trim() != string.Empty).ToArray();
                 for (int i = 1; i < headers.Count(); i++)
                 {
                    
                     var header = headers[i];
                     var tailWater = tailWatersCache.SingleOrDefault(t => t.Acronym == header);
+
+                    //Create Tailwater if it does not already exist(they may add a new one)
                     if(tailWater == null)
                     {
                         tailWater = new Data.Models.TailWater()
@@ -65,6 +73,7 @@ namespace TailWaters.MicroServices.Operators
                         await dbContext.TailWaters.AddAsync(tailWater);
                     }
 
+                    //Pivot data and push to database
                     foreach (var line in lines.Skip(1))
                     {
                         var cols = line.Split(" ").Where(t => t.Trim() != string.Empty).ToArray();
