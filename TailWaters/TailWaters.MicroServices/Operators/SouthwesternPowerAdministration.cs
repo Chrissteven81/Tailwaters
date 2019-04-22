@@ -25,12 +25,8 @@ namespace TailWaters.MicroServices.Operators
         [FunctionName("SouthwesternPowerAdministration")]
         public static async Task Run([TimerTrigger("0 0 0 * * *", RunOnStartup = true)]TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
-            //Initialize Configuration for ASP.net Core v2
-            var config = new ConfigurationBuilder()
-                        .SetBasePath(context.FunctionAppDirectory)
-                        .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                        .AddEnvironmentVariables()
-                        .Build();
+            var configuration = new Application(context)
+                                .Configuration;
 
             //Get Day of the Week
             var day = DateTime.Today.DayOfWeek.ToString();
@@ -45,7 +41,7 @@ namespace TailWaters.MicroServices.Operators
 
             //Build Context Options
             var optionBuilder = new DbContextOptionsBuilder<Data.Models.TailWatersContext>();
-            optionBuilder.UseSqlServer(config.GetConnectionString("TailWaters"));
+            optionBuilder.UseSqlServer(configuration.GetConnectionString("TailWaters"));
 
             using (var dbContext = new TailWaters.Data.Models.TailWatersContext(optionBuilder.Options))
             {
@@ -68,7 +64,8 @@ namespace TailWaters.MicroServices.Operators
                         {
                             OperatorId = 1,
                             Acronym = header,
-                            Name = header
+                            Name = header,
+                            MaxFlow = 0
                         };
                         await dbContext.TailWaters.AddAsync(tailWater);
                     }
@@ -95,6 +92,9 @@ namespace TailWaters.MicroServices.Operators
                         else
                             schedule.ProjectedFlow = value;
 
+                        //Update Max Flow. for now I am going to try to do it like this, later i want to make this a machine learning variable
+                        if (value > tailWater.MaxFlow)
+                            tailWater.MaxFlow = value;
                     }
                 }
 

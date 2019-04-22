@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace TailWaters.Data.Models
 {
@@ -18,10 +17,16 @@ namespace TailWaters.Data.Models
 
         public virtual DbSet<Operator> Operators { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
+        public virtual DbSet<Subscriber> Subscribers { get; set; }
         public virtual DbSet<TailWater> TailWaters { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=TailWaters;Trusted_Connection=True;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -48,6 +53,33 @@ namespace TailWaters.Data.Models
                     .WithMany(p => p.Schedules)
                     .HasForeignKey(d => d.TailWaterId)
                     .HasConstraintName("FK_Schedules_TailWaters");
+            });
+
+            modelBuilder.Entity<Subscriber>(entity =>
+            {
+                entity.ToTable("Subscriber");
+
+                entity.Property(e => e.City)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Country)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.Number)
+                    .IsRequired()
+                    .HasMaxLength(12);
+
+                entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Zip)
+                    .IsRequired()
+                    .HasMaxLength(10);
             });
 
             modelBuilder.Entity<TailWater>(entity =>

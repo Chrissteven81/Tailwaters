@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "Server=.\sqlexpress;Database=TailWaters;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force

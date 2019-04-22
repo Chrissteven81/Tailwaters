@@ -14,6 +14,7 @@ namespace TailWaters.Data.Models
         public int OperatorId { get; set; }
         public string Name { get; set; }
         public string Acronym { get; set; }
+        public double MaxFlow { get; set; }
 
         public virtual Operator Operator { get; set; }
         public virtual ICollection<Schedule> Schedules { get; set; }
